@@ -3,22 +3,8 @@
 $token = '8704126137:AAFKWtfeYJq2A9LVAlJOoM-nMAnmzVhFGhY';
 $botUrl = "https://api.telegram.org/bot{$token}";
 
-// Читаем разными способами
 $input = file_get_contents('php://input');
-if (empty($input)) {
-    $input = http_get_request_body();
-}
-if (empty($input)) {
-    $input = implode('&', array_map(
-        fn($k, $v) => "$k=$v",
-        array_keys($_POST),
-        $_POST
-    ));
-}
-
-error_log("METHOD: " . $_SERVER['REQUEST_METHOD']);
 error_log("INPUT: " . $input);
-error_log("POST: " . json_encode($_POST));
 
 $update = json_decode($input, true);
 
