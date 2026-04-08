@@ -4,4 +4,4 @@ COPY . /app
 
 WORKDIR /app
 
-CMD php -S 0.0.0.0:$PORT index.php
+CMD php -S 0.0.0.0:${PORT:-8080} index.php
