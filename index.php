@@ -4,23 +4,22 @@ $token = '8704126137:AAFKWtfeYJq2A9LVAlJOoM-nMAnmzVhFGhY';
 $botUrl = "https://api.telegram.org/bot{$token}";
 
 $input = file_get_contents('php://input');
+
+// Лог входящих данных
+error_log("INPUT: " . $input);
+
 $update = json_decode($input, true);
 
 if (!isset($update['message'])) {
-    // Тест - открой в браузере
-    $ch = curl_init("{$botUrl}/getMe");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-    $result = curl_exec($ch);
-    $error = curl_error($ch);
-    curl_close($ch);
-    echo "RESULT: " . $result . "<br>ERROR: " . $error;
+    // Тест через браузер
+    echo "OK - no message";
     exit;
 }
 
 $chatId = $update['message']['chat']['id'];
 $text = $update['message']['text'] ?? '';
+
+error_log("CHAT: $chatId TEXT: $text");
 
 if ($text === '/start') {
     $reply = 'Привет! Я работаю 🤖';
@@ -36,7 +35,10 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-curl_exec($ch);
+$result = curl_exec($ch);
+$error = curl_error($ch);
 curl_close($ch);
+
+error_log("SEND RESULT: $result ERROR: $error");
 
 http_response_code(200);
