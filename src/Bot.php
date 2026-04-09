@@ -6,9 +6,9 @@ class Bot
 {
     private string $token;
     private Game $game;
-
     private array $state = [];
-
+    private string $supabaseUrl = 'https://hxgemkwwvsgvmzfdsrjv.supabase.co';
+    private string $supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4Z2Vta3d3dnNndm16ZmRzcmp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NDEyNzYsImV4cCI6MjA5MTMxNzI3Nn0.0NIV1g0hpEvy44g-xD1NUw4-5HNO_xXe62crBPJ_chY';
     public function __construct(Game $game, string $token)
     {
         $this->game = $game;
@@ -17,6 +17,9 @@ class Bot
 
     public function handle(array $update): void
     {
+        $chatId = $update['message']['chat']['id'] ?? $update['callback_query']['message']['chat']['id'];
+        $this->loadState($chatId);
+
         if (isset($update['message'])) {
             $this->handleMessage($update['message']);
         }
@@ -24,6 +27,57 @@ class Bot
         if (isset($update['callback_query'])) {
             $this->handleCallback($update['callback_query']);
         }
+
+        $this->saveState($chatId);
+    }
+
+
+    private function loadState(string $chatId): void
+    {
+        $ch = curl_init($this->supabaseUrl . '/rest/v1/bot_state?chat_id=eq.' . $chatId);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'apikey: ' . $this->supabaseKey,
+                'Authorization: Bearer ' . $this->supabaseKey,
+            ],
+        ]);
+        $result = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+
+        if (!empty($result)) {
+            $row = $result[0];
+            $this->state[$chatId] = $row['state'];
+            $this->state[$chatId . '_players'] = $row['players'];
+            $this->state[$chatId . '_spies'] = $row['spies'];
+            $this->state[$chatId . '_current'] = $row['current'];
+        }
+    }
+
+    private function saveState(string $chatId): void
+    {
+        $data = json_encode([
+            'chat_id' => $chatId,
+            'state' => $this->state[$chatId] ?? null,
+            'players' => $this->state[$chatId . '_players'] ?? null,
+            'spies' => $this->state[$chatId . '_spies'] ?? null,
+            'current' => $this->state[$chatId . '_current'] ?? 0,
+        ]);
+
+        $ch = curl_init($this->supabaseUrl . '/rest/v1/bot_state');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => [
+                'apikey: ' . $this->supabaseKey,
+                'Authorization: Bearer ' . $this->supabaseKey,
+                'Content-Type: application/json',
+                'Prefer: resolution=merge-duplicates',
+            ],
+        ]);
+        curl_exec($ch);
+        curl_close($ch);
     }
 
     private function handleMessage(array $message): void
