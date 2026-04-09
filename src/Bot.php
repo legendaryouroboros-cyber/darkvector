@@ -88,9 +88,11 @@ class Bot
     {
         $text = $message['text'] ?? '';
         $chatId = $message['chat']['id'];
+        $messageId = $message['message_id'];
 
         if ($text === '/start') {
             $this->onStart($chatId);
+            $this->deleteMessage($chatId, $messageId);
             return;
         }
 
@@ -101,7 +103,9 @@ class Bot
             'waiting_spies' => $this->onWaitingSpies($chatId, $text),
             default => null
         };
-}
+
+        $this->deleteMessage($chatId, $messageId);
+    }
 
     private function handleCallback(array $callback): void
     {
@@ -228,4 +232,18 @@ class Bot
         curl_close($ch);
     }
 
+    private function deleteMessage(string $chatId, int $messageId): void
+    {
+        $ch = curl_init('https://api.telegram.org/bot' . $this->token . '/deleteMessage');
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POSTFIELDS => [
+                'chat_id' => $chatId,
+                'message_id' => $messageId,
+            ],
+        ]);
+        curl_exec($ch);
+        curl_close($ch);
+    }
 }
