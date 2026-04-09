@@ -113,7 +113,7 @@ class Bot
         $chatId = $callback['message']['chat']['id'];
         $messageId = $callback['message']['message_id'];
 
-        $this->removeKeyboard($chatId, $messageId);
+        $this->deleteMessage($chatId, $messageId);
 
         if (str_starts_with($data, 'theme_')) {
             $theme = str_replace('theme_', '', $data);
@@ -216,21 +216,6 @@ class Bot
     }
 
 
-    private function removeKeyboard(string $chatId, int $messageId): void
-    {
-        $ch = curl_init('https://api.telegram.org/bot' . $this->token . '/editMessageReplyMarkup');
-        curl_setopt_array($ch, [
-            CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POSTFIELDS => [
-                'chat_id' => $chatId,
-                'message_id' => $messageId,
-                'reply_markup' => json_encode(['inline_keyboard' => []]),
-            ],
-        ]);
-        curl_exec($ch);
-        curl_close($ch);
-    }
 
     private function deleteMessage(string $chatId, int $messageId): void
     {
