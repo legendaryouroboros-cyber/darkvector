@@ -151,7 +151,7 @@ return [
     'Kunkka', 'Legion Commander', 'Leshrac', 'Lich', 'Lifestealer', 'Lina',
     'Lion', 'Lone Druid', 'Luna', 'Lycan', 'Magnus', 'Marci', 'Mars',
     'Medusa', 'Meepo', 'Mirana', 'Monkey King', 'Morphling', 'Muerta',
-    'Naga Siren', 'Nature\'s Prophet', 'Necrophos', 'Night Stalker', 'Nyx Assassin',
+    'Naga Siren', 'Nature s Prophet', 'Necrophos', 'Night Stalker', 'Nyx Assassin',
     'Ogre Magi', 'Omniknight', 'Oracle', 'Outworld Destroyer', 'Pangolier',
     'Phantom Assassin', 'Phantom Lancer', 'Phoenix', 'Primal Beast', 'Puck',
     'Pudge', 'Pugna', 'Queen of Pain', 'Razor', 'Riki', 'Rubick',
@@ -163,4 +163,32 @@ return [
     'Venomancer', 'Viper', 'Visage', 'Void Spirit', 'Warlock', 'Weaver',
     'Windranger', 'Winter Wyvern', 'Witch Doctor', 'Wraith King', 'Zeus'
 ],
+    'Злодеи' => [
+        'Джокер', 'Танос', 'Локи', 'Дарт Вейдер', 'Волан-де-Морт', 'Ганнибал Лектер',
+        'Саурон', 'Пеннивайз', 'Фредди Крюгер', 'Джейсон Вурхиз', 'Майкл Майерс',
+        'Ксеноморф', 'Хищник', 'Агент Смит', 'Кайло Рен', 'Красный Череп',
+        'Альтрон', 'Зелёный гоблин', 'Доктор Осьминог', 'Веном', 'Магнето',
+        'Апокалипсис', 'Хела', 'Дормамму', 'Малефисента', 'Круэлла де Виль',
+        'Джафар', 'Скар', 'Шрам (Король Лев)', 'Капитан Крюк',
+        'Шао Кан',
+
+        'Пингвин',
+        'Дарксайд', 'Думсдэй', 'Дезстроук',
+
+
+
+        'Терминатор T-1000', 'Скайнет',
+
+        'Хоумлендер', 'Билли Бутчер',
+
+        'Тайлер Дёрден (антигерой)',
+
+        'Антон Чигур', 'Ханс Ланда',
+
+        'Шреддер',
+
+        'Мориарти',
+
+        'Аид', 'Урсула', 'Капитан Барбосса',
+    ],
 ];
