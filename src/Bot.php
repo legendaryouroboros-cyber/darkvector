@@ -73,7 +73,8 @@ class Bot
     private function onStart(string $chatId): void
     {
         $this->state[$chatId] = 'waiting_players';
-        $this->sendMessage($chatId,'Добро пожаловать в класс шпиона');
+        $this->sendMessage($chatId,'Добро пожаловать в класс шпиона. Сколько игроков?');
+
     }
 
     private function sendMessage(string $chatId, string $text, array $keyboard = []): void
